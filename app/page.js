@@ -1,65 +1,335 @@
-import Image from "next/image";
+"use client";
+import { useEffect, useRef, useState } from "react";
+
+const skills = {
+  "AI & ML": ["Python", "TensorFlow", "PyTorch", "LangChain", "LangGraph", "Hugging Face", "YOLOv8", "OpenCV", "Reinforcement Learning", "Fuzzy Logic", "Keras"],
+  "Backend & Data": ["FastAPI", "Django", "Flask", "Docker", "MySQL", "PostgreSQL", "MongoDB", "Apache Spark", "Pandas", "NumPy", "REST APIs"],
+  "Hardware": ["Raspberry Pi", "Arduino", "STM32", "PLC / TIA Portal", "MATLAB", "SOLIDWORKS", "AutoCAD", "C/C++", "SEE Electrical"],
+};
+
+const projects = [
+  {
+    num: "01",
+    title: "AI Job Application Assistant",
+    desc: "Matches CVs to job descriptions using LLMs, scores compatibility, and rewrites summaries tailored to each role.",
+    stack: ["FastAPI", "LangChain", "React", "Docker", "ChromaDB"],
+    status: "In Progress",
+    accent: "#10b981",
+  },
+  {
+    num: "02",
+    title: "CV Analysis System",
+    desc: "Production-grade AI recruitment pipeline. LLaMA 3 70B via Ollama + LangGraph multi-step workflow. 90% accuracy improvement over manual processing.",
+    stack: ["LLaMA 3 70B", "LangGraph", "Ollama", "MySQL", "Docker"],
+    status: "Completed",
+    accent: "#6366f1",
+  },
+  {
+    num: "03",
+    title: "Real-time Object Detection",
+    desc: "Live YOLOv8 detection streamed to the browser via WebSocket. Annotated frames with bounding boxes and confidence scores in real time.",
+    stack: ["YOLOv8", "OpenCV", "FastAPI", "WebSocket", "React"],
+    status: "Planned",
+    accent: "#f59e0b",
+  },
+  {
+    num: "04",
+    title: "PLC Welding Machine Modernization",
+    desc: "Full industrial modernization of STAR B700 welding machine. New PLC, electrical schematic redesign, circuit board installation. -60% processing time.",
+    stack: ["TIA Portal", "PLC", "SEE Electrical"],
+    status: "Completed",
+    accent: "#6366f1",
+  },
+];
+
+const experience = [
+  {
+    role: "AI Engineer Intern",
+    company: "Think Tank Business Solutions",
+    period: "Feb 2024 – Nov 2024",
+    location: "Alain Savary, Tunisia",
+    points: [
+      "Built a production AI CV analysis system using LLaMA 3 70B via Ollama",
+      "Designed a LangGraph multi-step workflow for recruitment decision-making",
+      "Containerized the full stack with Docker for scalable deployment",
+      "Achieved 90% improvement in CV analysis accuracy",
+      "Applied Scrum + CRISP-DM methodologies for iterative delivery",
+    ],
+  },
+  {
+    role: "Industrial Automation Intern",
+    company: "LILAS Hygiene Products",
+    period: "Jan 2022 – May 2022",
+    location: "Majaz Albab, Beja, Tunisia",
+    points: [
+      "Complete modernization of the STAR B700 welding machine",
+      "Replaced and reprogrammed the PLC from scratch",
+      "Designed a new electrical schematic and circuit board",
+      "Reduced processing time by 60% through code optimization",
+    ],
+  },
+];
+
+function useInView(threshold = 0.15) {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setInView(true); }, { threshold });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, inView];
+}
+
+function FadeIn({ children, delay = 0, className = "" }) {
+  const [ref, inView] = useInView();
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: inView ? 1 : 0,
+        transform: inView ? "translateY(0)" : "translateY(28px)",
+        transition: `opacity 0.7s ease ${delay}s, transform 0.7s ease ${delay}s`,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
 
 export default function Home() {
+  const [activeSkill, setActiveSkill] = useState("AI & ML");
+  const [heroRef, heroInView] = useInView(0.1);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main style={{ background: "#080810", color: "#e2e8f0", fontFamily: "'DM Sans', sans-serif", overflowX: "hidden" }}>
+
+      {/* Google font */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&family=DM+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        ::selection { background: #10b98133; color: #10b981; }
+        html { scroll-behavior: smooth; }
+        .glow { box-shadow: 0 0 40px #10b98122; }
+        .card-hover { transition: border-color 0.3s, transform 0.3s; }
+        .card-hover:hover { border-color: #10b98155 !important; transform: translateY(-3px); }
+        .tag { display:inline-block; font-family:'DM Mono',monospace; font-size:11px; padding:3px 10px; border-radius:999px; border:1px solid #1e293b; color:#94a3b8; background:#0f172a; }
+        .skill-btn { transition: all 0.2s; cursor:pointer; border:none; outline:none; }
+        .skill-btn.active { background:#10b981 !important; color:#080810 !important; }
+        .skill-pill { display:inline-block; font-size:13px; padding:6px 14px; border-radius:999px; border:1px solid #1e293b; color:#94a3b8; background:#0f172a; margin:4px; transition: all 0.2s; }
+        .skill-pill:hover { border-color:#10b98166; color:#10b981; }
+        .dot-line { position:relative; padding-left:20px; }
+        .dot-line::before { content:''; position:absolute; left:0; top:8px; width:6px; height:6px; border-radius:50%; background:#10b981; }
+        a { text-decoration:none; }
+      `}</style>
+
+      {/* BG grid */}
+      <div style={{ position:"fixed", inset:0, backgroundImage:"linear-gradient(#1e293b18 1px, transparent 1px), linear-gradient(90deg, #1e293b18 1px, transparent 1px)", backgroundSize:"60px 60px", pointerEvents:"none", zIndex:0 }} />
+
+      {/* HERO */}
+      <section style={{ minHeight:"100vh", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", textAlign:"center", padding:"100px 24px 60px", position:"relative", zIndex:1 }}>
+        <div
+          ref={heroRef}
+          style={{ opacity: heroInView ? 1 : 0, transform: heroInView ? "none" : "translateY(30px)", transition: "opacity 0.9s ease, transform 0.9s ease" }}
+        >
+          <p style={{ fontFamily:"'DM Mono',monospace", fontSize:"12px", letterSpacing:"0.2em", color:"#10b981", textTransform:"uppercase", marginBottom:"24px" }}>
+            AI &amp; Robotics Engineer
           </p>
+          <h1 style={{ fontFamily:"'Syne',sans-serif", fontSize:"clamp(52px,10vw,96px)", fontWeight:800, lineHeight:1.0, color:"#f8fafc", marginBottom:"12px", letterSpacing:"-2px" }}>
+            Skander<br />
+            <span style={{ WebkitTextStroke:"1px #334155", color:"transparent" }}>Andolsi</span>
+          </h1>
+          <p style={{ fontSize:"clamp(15px,2vw,18px)", color:"#64748b", maxWidth:"480px", margin:"24px auto 40px", lineHeight:1.7 }}>
+            I build production-ready AI systems — LLM pipelines, computer vision, scalable backends. Based in Tunisia, available worldwide.
+          </p>
+          <div style={{ display:"flex", gap:"12px", flexWrap:"wrap", justifyContent:"center" }}>
+            <a href="#projects" style={{ background:"#10b981", color:"#080810", fontWeight:600, fontSize:"14px", padding:"12px 28px", borderRadius:"8px", transition:"background 0.2s" }}
+              onMouseEnter={e=>e.target.style.background="#34d399"} onMouseLeave={e=>e.target.style.background="#10b981"}>
+              View Projects
+            </a>
+            <a href="#contact" style={{ border:"1px solid #1e293b", color:"#94a3b8", fontWeight:500, fontSize:"14px", padding:"12px 28px", borderRadius:"8px", transition:"all 0.2s" }}
+              onMouseEnter={e=>{e.target.style.borderColor="#10b981";e.target.style.color="#10b981"}} onMouseLeave={e=>{e.target.style.borderColor="#1e293b";e.target.style.color="#94a3b8"}}>
+              Contact Me
+            </a>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Scroll hint */}
+        <div style={{ position:"absolute", bottom:"32px", left:"50%", transform:"translateX(-50%)", display:"flex", flexDirection:"column", alignItems:"center", gap:"6px", opacity:0.4 }}>
+          <span style={{ fontFamily:"'DM Mono',monospace", fontSize:"10px", letterSpacing:"0.15em", color:"#475569" }}>SCROLL</span>
+          <div style={{ width:"1px", height:"32px", background:"linear-gradient(#10b981, transparent)" }} />
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* ABOUT */}
+      <section id="about" style={{ maxWidth:"900px", margin:"0 auto", padding:"100px 24px", position:"relative", zIndex:1 }}>
+        <FadeIn>
+          <p style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", letterSpacing:"0.2em", color:"#10b981", textTransform:"uppercase", marginBottom:"16px" }}>01 / About</p>
+          <h2 style={{ fontFamily:"'Syne',sans-serif", fontSize:"clamp(32px,5vw,52px)", fontWeight:800, color:"#f8fafc", marginBottom:"40px", letterSpacing:"-1px" }}>Who I am</h2>
+        </FadeIn>
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"48px", alignItems:"start" }}>
+          <FadeIn delay={0.1}>
+            <p style={{ color:"#94a3b8", lineHeight:1.9, fontSize:"15px", marginBottom:"20px" }}>
+              I hold a <strong style={{color:"#e2e8f0"}}>Master's degree in Advanced Robotics and Artificial Intelligence</strong> from ISET Bizerte, Tunisia. My work sits at the intersection of AI engineering and systems thinking.
+            </p>
+            <p style={{ color:"#94a3b8", lineHeight:1.9, fontSize:"15px", marginBottom:"20px" }}>
+              I design and deploy full-stack AI solutions — from fine-tuning LLMs and building LangGraph agents, to real-time computer vision pipelines and PLC automation.
+            </p>
+            <p style={{ color:"#94a3b8", lineHeight:1.9, fontSize:"15px" }}>
+              I'm equally fluent in Python backends, Docker infrastructure, and low-level hardware with Raspberry Pi, Arduino, and STM32.
+            </p>
+          </FadeIn>
+          <FadeIn delay={0.2}>
+            <div style={{ display:"flex", flexDirection:"column", gap:"16px" }}>
+              {[
+                ["📍 Location", "Ras Jebal, Tunisia"],
+                ["🎓 Degree", "Master's — Advanced Robotics & AI"],
+                ["🗣 Languages", "Arabic · English · French"],
+                ["🌐 Available", "Remote worldwide"],
+                ["✉️ Email", "skander.andolsi01@gmail.com"],
+              ].map(([k, v]) => (
+                <div key={k} style={{ display:"flex", gap:"12px", padding:"12px 16px", border:"1px solid #1e293b", borderRadius:"10px", background:"#0d1117" }}>
+                  <span style={{ color:"#10b981", fontWeight:500, fontSize:"13px", minWidth:"100px" }}>{k}</span>
+                  <span style={{ color:"#94a3b8", fontSize:"13px" }}>{v}</span>
+                </div>
+              ))}
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* SKILLS */}
+      <section id="skills" style={{ background:"#0d1117", padding:"100px 24px", position:"relative", zIndex:1 }}>
+        <div style={{ maxWidth:"900px", margin:"0 auto" }}>
+          <FadeIn>
+            <p style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", letterSpacing:"0.2em", color:"#10b981", textTransform:"uppercase", marginBottom:"16px" }}>02 / Skills</p>
+            <h2 style={{ fontFamily:"'Syne',sans-serif", fontSize:"clamp(32px,5vw,52px)", fontWeight:800, color:"#f8fafc", marginBottom:"40px", letterSpacing:"-1px" }}>Tech Stack</h2>
+          </FadeIn>
+          <FadeIn delay={0.1}>
+            <div style={{ display:"flex", gap:"8px", marginBottom:"32px", flexWrap:"wrap" }}>
+              {Object.keys(skills).map((k) => (
+                <button key={k} className={`skill-btn ${activeSkill === k ? "active" : ""}`}
+                  onClick={() => setActiveSkill(k)}
+                  style={{ padding:"8px 20px", borderRadius:"999px", border:"1px solid #1e293b", background: activeSkill===k?"#10b981":"#0f172a", color: activeSkill===k?"#080810":"#94a3b8", fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:500 }}>
+                  {k}
+                </button>
+              ))}
+            </div>
+            <div style={{ minHeight:"120px" }}>
+              {skills[activeSkill].map((s) => (
+                <span key={s} className="skill-pill">{s}</span>
+              ))}
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* EXPERIENCE */}
+      <section id="experience" style={{ maxWidth:"900px", margin:"0 auto", padding:"100px 24px", position:"relative", zIndex:1 }}>
+        <FadeIn>
+          <p style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", letterSpacing:"0.2em", color:"#10b981", textTransform:"uppercase", marginBottom:"16px" }}>03 / Experience</p>
+          <h2 style={{ fontFamily:"'Syne',sans-serif", fontSize:"clamp(32px,5vw,52px)", fontWeight:800, color:"#f8fafc", marginBottom:"48px", letterSpacing:"-1px" }}>Where I've worked</h2>
+        </FadeIn>
+        <div style={{ display:"flex", flexDirection:"column", gap:"32px" }}>
+          {experience.map((e, i) => (
+            <FadeIn key={e.company} delay={i * 0.1}>
+              <div className="card-hover" style={{ border:"1px solid #1e293b", borderRadius:"16px", padding:"28px 32px", background:"#0d1117" }}>
+                <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", flexWrap:"wrap", gap:"8px", marginBottom:"20px" }}>
+                  <div>
+                    <h3 style={{ fontFamily:"'Syne',sans-serif", fontSize:"20px", fontWeight:700, color:"#f8fafc", marginBottom:"4px" }}>{e.role}</h3>
+                    <p style={{ color:"#10b981", fontSize:"14px", fontWeight:500 }}>{e.company}</p>
+                  </div>
+                  <div style={{ textAlign:"right" }}>
+                    <p style={{ fontFamily:"'DM Mono',monospace", fontSize:"12px", color:"#475569" }}>{e.period}</p>
+                    <p style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", color:"#334155", marginTop:"2px" }}>{e.location}</p>
+                  </div>
+                </div>
+                <div style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
+                  {e.points.map((p) => (
+                    <p key={p} className="dot-line" style={{ color:"#94a3b8", fontSize:"14px", lineHeight:1.7 }}>{p}</p>
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
+          ))}
+        </div>
+      </section>
+
+      {/* PROJECTS */}
+      <section id="projects" style={{ background:"#0d1117", padding:"100px 24px", position:"relative", zIndex:1 }}>
+        <div style={{ maxWidth:"900px", margin:"0 auto" }}>
+          <FadeIn>
+            <p style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", letterSpacing:"0.2em", color:"#10b981", textTransform:"uppercase", marginBottom:"16px" }}>04 / Projects</p>
+            <h2 style={{ fontFamily:"'Syne',sans-serif", fontSize:"clamp(32px,5vw,52px)", fontWeight:800, color:"#f8fafc", marginBottom:"48px", letterSpacing:"-1px" }}>What I've built</h2>
+          </FadeIn>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(380px,1fr))", gap:"20px" }}>
+            {projects.map((p, i) => (
+              <FadeIn key={p.num} delay={i * 0.08}>
+                <div className="card-hover" style={{ border:"1px solid #1e293b", borderRadius:"16px", padding:"28px", background:"#080810", height:"100%", display:"flex", flexDirection:"column" }}>
+                  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:"16px" }}>
+                    <span style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", color:"#334155" }}>{p.num}</span>
+                    <span style={{
+                      fontFamily:"'DM Mono',monospace", fontSize:"10px", padding:"3px 10px", borderRadius:"999px",
+                      background: p.status==="Completed"?"#10b98115":p.status==="In Progress"?"#f59e0b15":"#334155",
+                      color: p.status==="Completed"?"#10b981":p.status==="In Progress"?"#f59e0b":"#64748b",
+                      border: `1px solid ${p.status==="Completed"?"#10b98130":p.status==="In Progress"?"#f59e0b30":"#1e293b"}`
+                    }}>
+                      {p.status}
+                    </span>
+                  </div>
+                  <h3 style={{ fontFamily:"'Syne',sans-serif", fontSize:"18px", fontWeight:700, color:"#f8fafc", marginBottom:"12px", lineHeight:1.3 }}>{p.title}</h3>
+                  <p style={{ color:"#64748b", fontSize:"13px", lineHeight:1.8, marginBottom:"20px", flexGrow:1 }}>{p.desc}</p>
+                  <div style={{ display:"flex", flexWrap:"wrap", gap:"6px" }}>
+                    {p.stack.map((t) => <span key={t} className="tag">{t}</span>)}
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CONTACT */}
+      <section id="contact" style={{ maxWidth:"900px", margin:"0 auto", padding:"100px 24px 120px", position:"relative", zIndex:1, textAlign:"center" }}>
+        <FadeIn>
+          <p style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", letterSpacing:"0.2em", color:"#10b981", textTransform:"uppercase", marginBottom:"16px" }}>05 / Contact</p>
+          <h2 style={{ fontFamily:"'Syne',sans-serif", fontSize:"clamp(32px,5vw,64px)", fontWeight:800, color:"#f8fafc", marginBottom:"20px", letterSpacing:"-1px" }}>
+            Let's build<br />something great
+          </h2>
+          <p style={{ color:"#64748b", fontSize:"15px", maxWidth:"420px", margin:"0 auto 48px", lineHeight:1.8 }}>
+            Open to remote opportunities, freelance AI projects, and interesting collaborations.
+          </p>
+          <div style={{ display:"flex", gap:"12px", justifyContent:"center", flexWrap:"wrap" }}>
+            {[
+              { label:"Send an Email", href:"mailto:skander.andolsi01@gmail.com", primary:true },
+              { label:"LinkedIn", href:"https://www.linkedin.com/in/skander-andolsi", primary:false },
+              { label:"GitHub", href:"https://github.com/SkanderAn", primary:false },
+            ].map((btn) => (
+              <a key={btn.label} href={btn.href} target={btn.primary ? undefined : "_blank"}
+                style={{
+                  padding:"12px 28px", borderRadius:"8px", fontWeight:600, fontSize:"14px", transition:"all 0.2s",
+                  background: btn.primary ? "#10b981" : "transparent",
+                  color: btn.primary ? "#080810" : "#94a3b8",
+                  border: btn.primary ? "none" : "1px solid #1e293b",
+                }}
+                onMouseEnter={e => { if(!btn.primary){e.currentTarget.style.borderColor="#10b981";e.currentTarget.style.color="#10b981";}else{e.currentTarget.style.background="#34d399";} }}
+                onMouseLeave={e => { if(!btn.primary){e.currentTarget.style.borderColor="#1e293b";e.currentTarget.style.color="#94a3b8";}else{e.currentTarget.style.background="#10b981";} }}
+              >
+                {btn.label}
+              </a>
+            ))}
+          </div>
+        </FadeIn>
+      </section>
+
+      {/* FOOTER */}
+      <footer style={{ borderTop:"1px solid #1e293b", padding:"24px", textAlign:"center", position:"relative", zIndex:1 }}>
+        <p style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", color:"#334155", letterSpacing:"0.1em" }}>
+          © 2025 SKANDER ANDOLSI — BUILT WITH NEXT.JS &amp; TAILWIND
+        </p>
+      </footer>
+
+    </main>
   );
 }
